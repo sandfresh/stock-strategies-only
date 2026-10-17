@@ -1,12 +1,17 @@
 import os
 import json
-
+import base64
 import gspread
 from google.oauth2.service_account import Credentials
 
 
 def get_gsheet():
-    creds_json = os.environ["GOOGLE_CREDS_JSON"]
+    creds_b64 = os.environ.get("GOOGLE_CREDS_JSON_B64", "")
+    if not creds_b64:
+        raise ValueError("找不到環境變數 GOOGLE_CREDS_JSON_B64")
+        
+    creds_json = base64.b64decode(creds_b64).decode("utf-8")
+    
     creds_dict = json.loads(creds_json)
     
     if "private_key" in creds_dict:
