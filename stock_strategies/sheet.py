@@ -8,6 +8,10 @@ from google.oauth2.service_account import Credentials
 def get_gsheet():
     creds_json = os.environ["GOOGLE_CREDS_JSON"]
     creds_dict = json.loads(creds_json)
+    
+    if "private_key" in creds_dict:
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        
     scopes = [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive",
